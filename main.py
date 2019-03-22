@@ -69,8 +69,8 @@ def main():
 
     # Layer 1
     model.add(keras.layers.Conv2D(
-        32,
-        (4, 4),
+        2,
+        (2, 2),
         padding="same",
         input_shape=(None, None, 3),
         activation="relu",
@@ -81,28 +81,28 @@ def main():
     ))
 
     # Layer 2
-    model.add(keras.layers.Conv2D(
-        64,
-        (4, 4),
-        padding="same",
-        activation="relu",
-    ))
-    model.add(keras.layers.MaxPooling2D(
-        pool_size=(4, 4),
-        strides=(4, 4),
-    ))
+    #model.add(keras.layers.Conv2D(
+    #    4,
+    #    (4, 4),
+    #    padding="same",
+    #    activation="relu",
+    #))
+    #model.add(keras.layers.MaxPooling2D(
+    #    pool_size=(4, 4),
+    #    strides=(4, 4),
+    #))
     
     # Layer 3
-    model.add(keras.layers.Conv2D(
-        64,
-        (8, 8),
-        padding="same",
-        activation="relu",
-    ))
-    model.add(keras.layers.MaxPooling2D(
-        pool_size=(8, 8),
-        strides=(8, 8),
-    ))
+    #model.add(keras.layers.Conv2D(
+    #    8,
+    #    (8, 8),
+    #    padding="same",
+    #    activation="relu",
+    #))
+    #model.add(keras.layers.MaxPooling2D(
+    #    pool_size=(8, 8),
+    #    strides=(8, 8),
+    #))
     
     # Layer 4
     #model.add(keras.layers.Conv2D(
@@ -111,10 +111,10 @@ def main():
     #    padding="same",
     #    activation="relu",
     #))
-    model.add(keras.layers.MaxPooling2D(
-        pool_size=(4, 4),
-        strides=(4, 4),
-    ))
+    #model.add(keras.layers.MaxPooling2D(
+    #    pool_size=(4, 4),
+    #    strides=(4, 4),
+    #))
     
     # Pyramid layer
     model.add(keras.layers.Lambda(spatial_pyramid_pool, pyramid_output))
@@ -127,10 +127,10 @@ def main():
     # Layer 6
     #model.add(keras.layers.Reshape((17280,)))
     model.add(keras.layers.Flatten())
-    model.add(keras.layers.Dense(
-        17280,
-        activation="relu",
-    ))
+    #model.add(keras.layers.Dense(
+    #    60,
+    #    activation="relu",
+    #))
 
     # Layer 7
     model.add(keras.layers.Dense(
@@ -146,7 +146,7 @@ def main():
     )
 
     print(model.summary())
-    input()
+    #input()
 
     # Things to do per epoch
     for epoch_num in tqdm(range(EPOCHS)):
@@ -213,6 +213,8 @@ def main():
             
             all_image_paths = []
             all_label_paths = []
+            
+        temp_test(epoch_num, model)
 
     model.save('model.h5')
 

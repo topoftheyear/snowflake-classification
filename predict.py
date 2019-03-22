@@ -6,6 +6,7 @@ from tensorflow.python.keras import backend as K
 from tqdm import tqdm
 import numpy as np
 from helpers import *
+from spp_layer import *
 
 tf.enable_eager_execution()
 
@@ -45,7 +46,7 @@ def main():
     for image in tqdm(test_im_set):
         test_image_paths.append(load_and_preprocess_image(path=image))
 
-    model = keras.models.load_model('model.h5')
+    model = keras.models.load_model('model.h5', custom_objects={'Pyramid': spatial_pyramid_pool})
 
     # Compiling the model
     model.compile(
@@ -56,6 +57,7 @@ def main():
 
     results = []
     for image in tqdm(test_image_paths):
+        image = image.reshape(None, *image.shape)
         res = model.predict(
             x=image,
             verbose=0,
