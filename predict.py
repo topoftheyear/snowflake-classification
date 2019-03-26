@@ -1,14 +1,13 @@
-from __future__ import absolute_import, division, print_function
-
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.python.keras import backend as K
 from tqdm import tqdm
 import numpy as np
 from helpers import *
+from model import *
 from spp_layer import *
 
-tf.enable_eager_execution()
+#tf.enable_eager_execution()
 
 
 def main():
@@ -49,20 +48,22 @@ def main():
     model = keras.models.load_model('model.h5', custom_objects={'Pyramid': spatial_pyramid_pool})
 
     # Compiling the model
-    model.compile(
-        optimizer=OPTIMIZER,
-        loss=LOSS,
-        metrics=METRICS
-    )
+    #model.compile(
+    #    optimizer=OPTIMIZER,
+    #    loss=LOSS,
+    #    metrics=METRICS
+    #)
 
     results = []
     for image in tqdm(test_image_paths):
-        image = image.reshape(None, *image.shape)
+        print(image.shape)
         res = model.predict(
             x=image,
             verbose=0,
+            steps=1,
         )
         results.append(res)
+    
 
     print(results)
 

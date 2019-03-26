@@ -1,8 +1,7 @@
-from __future__ import absolute_import, division, print_function
-
 import tensorflow as tf
 from tensorflow import keras
 from spp_layer import *
+from model import *
 from tqdm import tqdm
 import numpy as np
 from helpers import *
@@ -10,14 +9,14 @@ import math
 from random import shuffle
 #import winsound
 
-EPOCHS = 5
+EPOCHS = 20
 BATCH_SIZE = 1
 STEPS_PER_EPOCH = 500
 SECTIONS = 36
 
 image_count = 0
 
-tf.enable_eager_execution()
+#tf.enable_eager_execution()
 
 print(tf.__version__)
 
@@ -42,116 +41,11 @@ def main():
         "Dendrite": 2,
         "Plates": 3,
     }
-
-    #all_image_paths = []
-    #for image in tqdm(im_set):
-    #    all_image_paths.append(load_and_preprocess_image(path=image))
-
-    #path_ds = tf.data.Dataset.from_tensor_slices(all_image_paths)
-
-    #label_ds = tf.data.Dataset.from_tensor_slices(tf.cast(all_image_labels, tf.float32))
-
-    #image_label_ds = tf.data.Dataset.zip((path_ds, label_ds))
-
-    #print('image shape: ', image_label_ds.output_shapes[0])
-    #print('label shape: ', image_label_ds.output_shapes[1])
-    #print('types: ', image_label_ds.output_types)
-    #print()
-    #print(image_label_ds)
-
-    #ds = image_label_ds.shuffle(buffer_size=image_count)
-    #ds = ds.repeat()
-    # ds = ds.batch(BATCH_SIZE)
-    # ds = ds.prefetch(buffer_size=2)
-    # print(ds)
-
-    model = tf.keras.Sequential()
-
-    # Layer 1
-    model.add(keras.layers.Conv2D(
-        2,
-        (2, 2),
-        padding="same",
-        input_shape=(None, None, 3),
-        activation="relu",
-    ))
-    model.add(keras.layers.MaxPooling2D(
-        pool_size=(4, 4),
-        strides=(2, 2),
-    ))
-
-    # Layer 2
-    #model.add(keras.layers.Conv2D(
-    #    4,
-    #    (4, 4),
-    #    padding="same",
-    #    activation="relu",
-    #))
-    #model.add(keras.layers.MaxPooling2D(
-    #    pool_size=(4, 4),
-    #    strides=(4, 4),
-    #))
     
-    # Layer 3
-    #model.add(keras.layers.Conv2D(
-    #    8,
-    #    (8, 8),
-    #    padding="same",
-    #    activation="relu",
-    #))
-    #model.add(keras.layers.MaxPooling2D(
-    #    pool_size=(8, 8),
-    #    strides=(8, 8),
-    #))
-    
-    # Layer 4
-    #model.add(keras.layers.Conv2D(
-    #    2,
-    #    (2, 2),
-    #    padding="same",
-    #    activation="relu",
-    #))
-    #model.add(keras.layers.MaxPooling2D(
-    #    pool_size=(4, 4),
-    #    strides=(4, 4),
-    #))
-    
-    # Pyramid layer
-    model.add(keras.layers.Lambda(spatial_pyramid_pool, pyramid_output))
-    
-    #model.add(keras.layers.MaxPooling2D(
-    #    pool_size=(1,1),
-    #    strides=(1,1),
-    #))
-
-    # Layer 6
-    #model.add(keras.layers.Reshape((17280,)))
-    model.add(keras.layers.Flatten())
-    #model.add(keras.layers.Dense(
-    #    60,
-    #    activation="relu",
-    #))
-
-    # Layer 7
-    model.add(keras.layers.Dense(
-        4,
-        activation="softmax",
-    ))
-
-    # Compiling the model
-    model.compile(
-        optimizer=OPTIMIZER,
-        loss=LOSS,
-        metrics=METRICS,
-    )
-
-    print(model.summary())
-    #input()
+    model = get_model((None, None, 1))
 
     # Things to do per epoch
     for epoch_num in tqdm(range(EPOCHS)):
-        #print('Epoch ' + str(epoch_num + 1) + '/' + str(EPOCHS))
-        
         # Shuffle data
         '''im_set_shuf = []
         la_set_shuf = []
@@ -196,14 +90,13 @@ def main():
             #print()
             #print(image_label_ds)
 
-            #ds = image_label_ds.shuffle(buffer_size=image_count)
             ds = image_label_ds.repeat()
             
             #print(ds.output_shapes)
             
             model.fit(
                 x=ds,
-                batch_size=BATCH_SIZE,
+                batch_size=1,
                 epochs=1,
                 verbose=0,
                 #validation_split=0.05,
@@ -213,9 +106,7 @@ def main():
             
             all_image_paths = []
             all_label_paths = []
-            
-        temp_test(epoch_num, model)
-
+    
     model.save('model.h5')
 
 
