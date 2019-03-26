@@ -9,7 +9,7 @@ import math
 from random import shuffle
 #import winsound
 
-EPOCHS = 20
+EPOCHS = 5
 BATCH_SIZE = 1
 STEPS_PER_EPOCH = 500
 SECTIONS = 36
@@ -47,7 +47,7 @@ def main():
     # Things to do per epoch
     for epoch_num in tqdm(range(EPOCHS)):
         # Shuffle data
-        '''im_set_shuf = []
+        im_set_shuf = []
         la_set_shuf = []
         index_shuf = list(range(len(im_set)))
         shuffle(index_shuf)
@@ -57,7 +57,7 @@ def main():
             la_set_shuf.append(la_set[i])
             
         im_set = im_set_shuf
-        la_set = la_set_shuf'''
+        la_set = la_set_shuf
 
         all_image_labels = [label_to_index[label] for label in la_set]
         all_image_labels = keras.utils.to_categorical(all_image_labels, 4)

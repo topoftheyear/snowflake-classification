@@ -43,6 +43,7 @@ def main():
 
     test_image_paths = []
     for image in tqdm(test_im_set):
+        print(image)
         test_image_paths.append(load_and_preprocess_image(path=image))
 
     model = keras.models.load_model('model.h5', custom_objects={'Pyramid': spatial_pyramid_pool})
@@ -56,7 +57,6 @@ def main():
 
     results = []
     for image in tqdm(test_image_paths):
-        print(image.shape)
         res = model.predict(
             x=image,
             verbose=0,

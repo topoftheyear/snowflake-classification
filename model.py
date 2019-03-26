@@ -18,53 +18,36 @@ def get_model(image_size):
         activation="relu",
     ))
     model.add(keras.layers.MaxPooling2D(
-        pool_size=(4, 4),
+        pool_size=(2, 2),
         strides=(2, 2),
     ))
 
     # Layer 2
-    #model.add(keras.layers.Conv2D(
-    #    4,
-    #    (4, 4),
-    #    padding="same",
-    #    activation="relu",
-    #))
-    #model.add(keras.layers.MaxPooling2D(
-    #    pool_size=(4, 4),
-    #    strides=(4, 4),
-    #))
+    model.add(keras.layers.Conv2D(
+        4,
+        (4, 4),
+        padding="same",
+        activation="relu",
+    ))
+    model.add(keras.layers.MaxPooling2D(
+        pool_size=(2, 2),
+        strides=(2, 2),
+    ))
     
     # Layer 3
-    #model.add(keras.layers.Conv2D(
-    #    8,
-    #    (8, 8),
-    #    padding="same",
-    #    activation="relu",
-    #))
-    #model.add(keras.layers.MaxPooling2D(
-    #    pool_size=(8, 8),
-    #    strides=(8, 8),
-    #))
-    
-    # Layer 4
-    #model.add(keras.layers.Conv2D(
-    #    2,
-    #    (2, 2),
-    #    padding="same",
-    #    activation="relu",
-    #))
-    #model.add(keras.layers.MaxPooling2D(
-    #    pool_size=(4, 4),
-    #    strides=(4, 4),
-    #))
+    model.add(keras.layers.Conv2D(
+        8,
+        (8, 8),
+        padding="same",
+        activation="relu",
+    ))
+    model.add(keras.layers.MaxPooling2D(
+        pool_size=(2, 2),
+        strides=(2, 2),
+    ))
     
     # Pyramid layer
     model.add(keras.layers.Lambda(spatial_pyramid_pool, pyramid_output))
-    
-    #model.add(keras.layers.MaxPooling2D(
-    #    pool_size=(1,1),
-    #    strides=(1,1),
-    #))
 
     # Layer 6
     #model.add(keras.layers.Reshape((17280,)))
