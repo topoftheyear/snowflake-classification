@@ -43,6 +43,7 @@ def main():
     }
     
     model = get_model((None, None, 1))
+    print(model.summary())
 
     # Things to do per epoch
     for epoch_num in tqdm(range(EPOCHS)):
@@ -75,7 +76,7 @@ def main():
             # Gather all images within the section given a chunk
             #print("Reading in files")
             #for x in tqdm(range(math.floor((section - 1) * len(all_image_labels) / SECTIONS), math.floor(section * len(all_image_labels) / SECTIONS))):
-            all_image_paths.append(load_and_preprocess_image(path=image))
+            all_image_paths.append(load_and_preprocess_image(path=image, channels=1))
             all_label_paths.append(label)
         
             path_ds = tf.data.Dataset.from_tensor_slices(all_image_paths)
@@ -94,15 +95,18 @@ def main():
             
             #print(ds.output_shapes)
             
-            model.fit(
-                x=ds,
-                batch_size=1,
-                epochs=1,
-                verbose=0,
-                #validation_split=0.05,
-                shuffle=False,
-                steps_per_epoch=1,
-            )
+            try:
+                model.fit(
+                    x=ds,
+                    batch_size=1,
+                    epochs=1,
+                    verbose=0,
+                    #validation_split=0.05,
+                    shuffle=False,
+                    steps_per_epoch=1,
+                )
+            except(Exception):
+                pass
             
             all_image_paths = []
             all_label_paths = []

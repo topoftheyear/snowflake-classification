@@ -9,11 +9,11 @@ LOSS = keras.losses.categorical_crossentropy
 METRICS = [keras.metrics.categorical_crossentropy]
 
 PYRAMID_SHAPE = [[1, 1], [2, 2], [3, 3], [4, 4]]
-PYRAMID_SHAPE_OTHER = [1, 2, 3, 4]
+PYRAMID_SHAPE_OTHER = [1, 2, 3]
 
 
-def preprocess_image(image):
-    image = tf.image.decode_png(image, channels=1, dtype=tf.uint8)
+def preprocess_image(image, channels):
+    image = tf.image.decode_png(image, channels, dtype=tf.uint8)
     #image = tf.expand_dims(image, axis=3)
     #image = np_spatial_pyramid_pooling(
     #    input_feature_maps=image,
@@ -27,8 +27,8 @@ def preprocess_image(image):
     return image
 
 
-def load_and_preprocess_image(path):
+def load_and_preprocess_image(path, channels=0):
     image = tf.read_file(path)
-    return preprocess_image(image)
+    return preprocess_image(image, channels)
     
     

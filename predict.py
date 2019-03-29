@@ -44,7 +44,7 @@ def main():
     test_image_paths = []
     for image in tqdm(test_im_set):
         print(image)
-        test_image_paths.append(load_and_preprocess_image(path=image))
+        test_image_paths.append(load_and_preprocess_image(path=image, channels=1))
 
     model = keras.models.load_model('model.h5', custom_objects={'Pyramid': spatial_pyramid_pool})
 

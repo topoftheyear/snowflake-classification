@@ -201,6 +201,6 @@ def spatial_pyramid_pool(inputs, dimensions=[1, 2, 3, 4], mode='max', implementa
 
 def pyramid_output(input_shape):
     shape = list(input_shape)
-    shape[-1] *= 30
+    shape[-1] *= 14
     return shape
     
