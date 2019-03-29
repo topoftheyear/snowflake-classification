@@ -16,11 +16,11 @@ def main():
     test_im_set = []
     test_label_set = []
 
-    with open("test_imageset", "r") as f:
+    with open("imageset", "r") as f:
         for line in f:
             test_im_set.append(line.replace('\n', ''))
 
-    with open("test_labelset", "r") as f:
+    with open("labelset", "r") as f:
         for line in f:
             test_label_set.append(line.replace('\n', ''))
 
@@ -38,8 +38,8 @@ def main():
         3: "Plates",
     }
 
-    test_image_labels = [label_to_index[label] for label in test_label_set]
-    test_image_labels = keras.utils.to_categorical(test_image_labels, 4)
+    temp_image_labels = [label_to_index[label] for label in test_label_set]
+    test_image_labels = keras.utils.to_categorical(temp_image_labels, 4)
 
     test_image_paths = []
     for image in tqdm(test_im_set):
@@ -47,13 +47,6 @@ def main():
         test_image_paths.append(load_and_preprocess_image(path=image, channels=1))
 
     model = keras.models.load_model('model.h5', custom_objects={'Pyramid': spatial_pyramid_pool})
-
-    # Compiling the model
-    #model.compile(
-    #    optimizer=OPTIMIZER,
-    #    loss=LOSS,
-    #    metrics=METRICS
-    #)
 
     results = []
     for image in tqdm(test_image_paths):
@@ -66,15 +59,45 @@ def main():
     
 
     print(results)
+    
+    formatted = {}
+    guessed = []
+    correct = 0
+    incorrect = 0
 
     with open('results.txt', 'w+') as f:
         for (x,y) in np.ndenumerate(results):
             string = "Image " + str(x[0]) + ": " + index_to_label[x[2]] + ": " + "{0:.0%}".format(y) + "\n"
             f.write(string)
             
+            if x[0] not in formatted:
+                formatted.append({x[0]: {}})
+            formatted[x[0]] = {index_to_label(x[2]): y}
+            
     with open('results_unedited.txt', 'w+') as f:
         for (x,y) in np.ndenumerate(results):
             f.write(str(x) + " | " + str(y) + "\n")
+            
+    # Get best guess for each image
+    for x in range(len(test_image_paths)):
+        group = formatted[x]
+        
+        maximum = max(group, key=group.get)
+        guessed.append({maximum, group[maximum]})
+        
+    print(guessed)
+        
+    # Compare best guess to actual result
+    for x in range(len(guessed)):
+        if guessed[x].key == temp_image_labels[x]:
+            correct += 1
+        else:
+            incorrect += 1
+    
+    print(f'Correct: {correct} | Incorrect: {incorrect}')
+    
+    accuracy = correct / (incorrect + correct)
+    print(f'Accuracy: {accuracy}')
 
 
 if __name__ == "__main__":

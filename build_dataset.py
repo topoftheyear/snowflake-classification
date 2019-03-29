@@ -14,7 +14,7 @@ for f in tqdm(listdir(data_location)):
     test = True
     for file in listdir(f"{data_location}/{f}"):
         image = file
-        if test:
+        if False:
             test_images.append(f"{data_location}/{f}/{image}")
             test_labels.append(f)
             test = False
