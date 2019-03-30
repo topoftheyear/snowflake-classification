@@ -43,7 +43,6 @@ def main():
 
     test_image_paths = []
     for image in tqdm(test_im_set):
-        print(image)
         test_image_paths.append(load_and_preprocess_image(path=image, channels=1))
 
     model = keras.models.load_model('model.h5', custom_objects={'Pyramid': spatial_pyramid_pool})
@@ -57,9 +56,6 @@ def main():
         )
         results.append(res)
     
-
-    print(results)
-    
     formatted = {}
     guessed = []
     correct = 0
@@ -71,8 +67,8 @@ def main():
             f.write(string)
             
             if x[0] not in formatted:
-                formatted.append({x[0]: {}})
-            formatted[x[0]] = {index_to_label(x[2]): y}
+                formatted[x[0]] = {}
+            formatted[x[0]][x[2]] = y
             
     with open('results_unedited.txt', 'w+') as f:
         for (x,y) in np.ndenumerate(results):
@@ -81,23 +77,20 @@ def main():
     # Get best guess for each image
     for x in range(len(test_image_paths)):
         group = formatted[x]
-        
         maximum = max(group, key=group.get)
-        guessed.append({maximum, group[maximum]})
-        
-    print(guessed)
+        guessed.append({maximum: group[maximum]})
         
     # Compare best guess to actual result
     for x in range(len(guessed)):
-        if guessed[x].key == temp_image_labels[x]:
+        if temp_image_labels[x] in guessed[x].keys():
             correct += 1
         else:
             incorrect += 1
     
-    print(f'Correct: {correct} | Incorrect: {incorrect}')
+    print("Correct: " + str(correct) + " | " + "Incorrect: " + str(incorrect))
     
     accuracy = correct / (incorrect + correct)
-    print(f'Accuracy: {accuracy}')
+    print("Accuracy: " + str(accuracy))
 
 
 if __name__ == "__main__":

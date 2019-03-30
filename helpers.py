@@ -4,12 +4,19 @@ from tensorflow.python.keras import backend as K
 from tqdm import tqdm
 import numpy as np
     
+EPOCHS = 50
+BATCH_SIZE = 1
+STEPS_PER_EPOCH = 500  # doesn't matter actually
+SECTIONS = 40
+
+USE_PREVIOUS = True
+    
 OPTIMIZER = keras.optimizers.Adam(lr=0.001)
 LOSS = keras.losses.categorical_crossentropy
 METRICS = [keras.metrics.categorical_crossentropy]
 
-PYRAMID_SHAPE = [[1, 1], [2, 2], [3, 3], [4, 4]]
-PYRAMID_SHAPE_OTHER = [1, 2, 3]
+PYRAMID_SHAPE_OTHER = [1, 2, 3, 4]
+PYRAMID_RETURN_SIZE = 30
 
 
 def preprocess_image(image, channels):

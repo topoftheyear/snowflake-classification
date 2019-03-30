@@ -32,14 +32,6 @@ def get_model(image_size):
         pool_size=(2, 2),
     ))
     
-    # Layer 3
-    model.add(keras.layers.Conv2D(
-        8,
-        (2, 2),
-        padding="same",
-        activation="relu",
-    ))
-    
     # Pyramid layer
     model.add(keras.layers.Lambda(spatial_pyramid_pool, pyramid_output))
 

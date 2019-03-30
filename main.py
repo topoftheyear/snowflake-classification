@@ -9,11 +9,6 @@ import math
 from random import shuffle
 #import winsound
 
-EPOCHS = 5
-BATCH_SIZE = 1
-STEPS_PER_EPOCH = 500
-SECTIONS = 36
-
 image_count = 0
 
 #tf.enable_eager_execution()
@@ -42,7 +37,13 @@ def main():
         "Plates": 3,
     }
     
-    model = get_model((None, None, 1))
+    model = None
+    if USE_PREVIOUS:
+        print("Using pre-built model")
+        model = keras.models.load_model('model.h5', custom_objects={'Pyramid': spatial_pyramid_pool})
+    else:
+        print("Creating new model from scratch")
+        model = get_model((None, None, 1))
     print(model.summary())
 
     # Things to do per epoch
